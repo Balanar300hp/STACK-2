@@ -82,7 +82,7 @@ template <typename T>
 stack<T>::stack(size_t size) : allocator<T>(size){};
 
 template <typename T>// + 
-stack<T>::stack(const stack& x){
+stack<T>::stack(const stack& tmp){
 	allocator<T>::count_ = tmp.count_;
 	allocator<T>::ptr_ = mem_copy(tmp.count_, tmp.size_, tmp.ptr_);
 	allocator<T>::size_ = tmp.size_;
@@ -132,8 +132,8 @@ void stack<T>::pop(){//сначала очистка памяти затем у�
 }
 
 template<typename T>//+
-stack<T>& stack<T>::operator=(const stack& b){
-	if (this != &b){
+stack<T>& stack<T>::operator=(const stack& tmp){
+	if (this != &tmp){
 		T* cp = mem_copy(tmp.count_, tmp.size_, tmp.ptr_);
 		delete[] allocator<T>::ptr_; 
 		allocator<T>::ptr_ = cp;
