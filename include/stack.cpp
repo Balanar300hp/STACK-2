@@ -3,12 +3,22 @@
 #pragma once
 #include <iostream>
 //using namespace std;
-
+template <typename T>//добавилась ф-я мем_копи для копирования вместо цикла //+
+T* mem_copy(size_t count_m, size_t array_size_m, const T * tmp) {
+	T *mass = new T[array_size_m];
+	try {
+	std::copy(tmp, tmp + count_m, mass);}
+	catch (...){
+	delete[] mass;
+	throw;
+	}
+	return mass;
+}
 
 
 template <typename T1, typename T2>
 void construct(T1 * ptr, T2 const & value) {
-	new(ptr)T1(value);
+	new(ptr) T1(value);
 }
 
 template <typename T>
@@ -59,7 +69,7 @@ template <typename T>
 class stack : private allocator<T>
 {
 public:
-	stack(size_t size=0); /* noexcept */
+	stack(); /* noexcept */
 	stack(const stack&); /* strong */
 	~stack(); /* noexcept */
 	size_t count() const noexcept; /* noexcept */
@@ -79,7 +89,7 @@ return p2;
 }*/
 
 template <typename T>
-stack<T>::stack(size_t size) : allocator<T>(size){};
+stack<T>::stack(){};
 
 template <typename T>// + 
 stack<T>::stack(const stack& tmp){
@@ -94,17 +104,6 @@ stack<T>::~stack(){ destroy(allocator<T>::ptr_, allocator<T>::ptr_ + allocator<T
 template <typename T>//+
 size_t stack<T>::count()const noexcept { return allocator<T>::count_; }
 
-template <typename T>//добавилась ф-я мем_копи для копирования вместо цикла //+
-auto mem_copy(size_t count_m, size_t array_size_m, const T * tmp)->T* {
-	T *mass = new T[array_size_m];
-	try {
-	std::copy(tmp, tmp + count_m, mass);}
-	catch (...){
-	delete[] mass;
-		throw;
-	}
-	return mass;
-}
 template <typename T>//+
 void stack<T>::push(T const &a){
 	if (allocator<T>::count_ == allocator<T>::size_) {
